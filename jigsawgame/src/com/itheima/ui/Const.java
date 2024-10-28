@@ -9,4 +9,6 @@ public class Const {
 	public static final int LOGIN_WINDOW_HEIGHT = 430;
 	public static final int REGISTER_WINDOW_WIDTH = 488;
 	public static final int REGISTER_WINDOW_HEIGHT = 500;
+	public static final int BACKGROUND_IMAGE_WIDTH = 508;
+	public static final int BACKGROUND_IMAGE_HEIGHT = 560;
 }

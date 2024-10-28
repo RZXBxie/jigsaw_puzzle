@@ -1,14 +1,12 @@
 package com.itheima.ui;
 
 import javax.swing.*;
+import javax.swing.border.BevelBorder;
 
 import java.io.File;
 import java.util.Random;
 
-import static com.itheima.ui.Const.GAME_WINDOW_HEIGHT;
-import static com.itheima.ui.Const.GAME_WINDOW_WIDTH;
-import static com.itheima.ui.Const.GAME_PICTURE_WIDTH;
-import static com.itheima.ui.Const.GAME_PICTURE_HEIGHT;
+import static com.itheima.ui.Const.*;
 
 public class GameJFrame extends JFrame {
 	// 新建一个游戏界面
@@ -26,36 +24,43 @@ public class GameJFrame extends JFrame {
 	private void initImage() {
 		String[] pictures = new String[16];
 		for (int i = 1; i <= 16; i++) {
-			String filename = "E:\\JigsawPuzzle\\jigsawgame\\image\\girl\\girl1\\" + i + ".jpg";
+			String filename = "jigsawgame\\image\\girl\\girl1\\" + i + ".jpg";
 			pictures[i - 1] = filename;
 		}
 		pictures[15] = null;
-		for (int i = 0; i < 15; ++i) {
+		for (int i = 0; i <= 15; ++i) {
 			Random rand = new Random();
-			int index = rand.nextInt(15);
+			int index = rand.nextInt(16);
 			swap(pictures, index, i);
 		}
 
 		// 将图片添加到JFrame中
+		// 先加载的图片在上方，后加载的图片在下方
 		int number = 1;
 		for (int i = 0; i < 4; i++) {
 			for (int j = 0; j < 4; j++) {
-				// 1.新建一个ImageIcon对象，它用来存储图片
+				// 新建一个ImageIcon对象，它用来存储图片
 				String filename = pictures[i * 4 + j];
-				pictures[number - 1] = filename;
 				ImageIcon icon = new ImageIcon(filename);
 
-				// 2.新建一个JLabel对象，他可以管理图片和文字
+				// 新建一个JLabel对象，他可以管理图片和文字
 				JLabel label = new JLabel(icon);
 
-				// 3.设置图片的位置
-				label.setBounds(j * GAME_PICTURE_WIDTH, i * GAME_PICTURE_HEIGHT, GAME_PICTURE_WIDTH, GAME_PICTURE_HEIGHT);
+				// 设置图片的位置
+				label.setBounds(j * GAME_PICTURE_WIDTH + 83, i * GAME_PICTURE_HEIGHT + 134, GAME_PICTURE_WIDTH, GAME_PICTURE_HEIGHT);
 
-				// 4.将图片添加到JFrame
+				// 给图片添加边框
+				label.setBorder(new BevelBorder(BevelBorder.LOWERED));
+
+				// 将图片添加到JFrame
 				this.getContentPane().add(label);
 				number++;
 			}
 		}
+		ImageIcon bg = new ImageIcon("jigsawgame\\image\\background.png");
+		JLabel label = new JLabel(bg);
+		label.setBounds(40, 40, BACKGROUND_IMAGE_WIDTH, BACKGROUND_IMAGE_HEIGHT);
+		this.getContentPane().add(label);
 	}
 
 	public void swap(String[] arr, int x, int y) {
