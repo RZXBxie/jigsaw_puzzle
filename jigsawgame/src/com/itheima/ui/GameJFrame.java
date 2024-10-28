@@ -3,16 +3,24 @@ package com.itheima.ui;
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 
-import java.io.File;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.Random;
 
 import static com.itheima.ui.Const.*;
 
-public class GameJFrame extends JFrame {
+public class GameJFrame extends JFrame implements KeyListener {
+	int[][] data = new int[4][4];
+	// x和y记录了空白图片所在的位置
+	int x = 0;
+	int y = 0;
 	// 新建一个游戏界面
 	public GameJFrame() {
 		initJFrame();
 		initJMenuBar();
+
+		// 初始化数据
+		initData();
 
 		// 初始化图片
 		initImage();
@@ -21,26 +29,32 @@ public class GameJFrame extends JFrame {
 		this.setVisible(true);
 	}
 
-	private void initImage() {
-		String[] pictures = new String[16];
-		for (int i = 1; i <= 16; i++) {
-			String filename = "jigsawgame\\image\\girl\\girl1\\" + i + ".jpg";
-			pictures[i - 1] = filename;
-		}
-		pictures[15] = null;
-		for (int i = 0; i <= 15; ++i) {
-			Random rand = new Random();
-			int index = rand.nextInt(16);
-			swap(pictures, index, i);
+	private void initData() {
+		int[] index = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
+
+		for (int i = 0; i < index.length; ++i) {
+			Random r = new Random();
+			int idx = r.nextInt(index.length);
+			if (index[idx] != 0) {
+				swap(index, i, idx);
+			} else {
+				x = i / 4;
+				y = i % 4;
+			}
 		}
 
+		for (int i = 0; i < 4; ++i) {
+			System.arraycopy(index, i * 4, data[i], 0, 4);
+		}
+	}
+
+	private void initImage() {
 		// 将图片添加到JFrame中
 		// 先加载的图片在上方，后加载的图片在下方
-		int number = 1;
 		for (int i = 0; i < 4; i++) {
 			for (int j = 0; j < 4; j++) {
 				// 新建一个ImageIcon对象，它用来存储图片
-				String filename = pictures[i * 4 + j];
+				String filename = "jigsawgame/image/girl/girl1/" + data[i][j] + ".jpg";
 				ImageIcon icon = new ImageIcon(filename);
 
 				// 新建一个JLabel对象，他可以管理图片和文字
@@ -54,7 +68,6 @@ public class GameJFrame extends JFrame {
 
 				// 将图片添加到JFrame
 				this.getContentPane().add(label);
-				number++;
 			}
 		}
 		ImageIcon bg = new ImageIcon("jigsawgame\\image\\background.png");
@@ -63,8 +76,8 @@ public class GameJFrame extends JFrame {
 		this.getContentPane().add(label);
 	}
 
-	public void swap(String[] arr, int x, int y) {
-		String tmp = arr[x];
+	public void swap(int[] arr, int x, int y) {
+		int tmp = arr[x];
 		arr[x] = arr[y];
 		arr[y] = tmp;
 	}
@@ -107,5 +120,28 @@ public class GameJFrame extends JFrame {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		// 取消默认布局，否则图片会被加载到正中间
 		this.setLayout(null);
+		// 给界面设置键盘监听事件
+		this.addKeyListener(this);
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		int code = e.getKeyCode();
+		switch (code) {
+			case LEFT -> System.out.println("向左移动");
+			case UP -> System.out.println("向上移动");
+			case RIGHT -> System.out.println("向右移动");
+			case DOWN -> System.out.println("向下移动");
+		}
 	}
 }

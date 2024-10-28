@@ -11,4 +11,9 @@ public class Const {
 	public static final int REGISTER_WINDOW_HEIGHT = 500;
 	public static final int BACKGROUND_IMAGE_WIDTH = 508;
 	public static final int BACKGROUND_IMAGE_HEIGHT = 560;
+
+	public static final int LEFT = 37;
+	public static final int UP = 38;
+	public static final int RIGHT = 39;
+	public static final int DOWN = 40;
 }
