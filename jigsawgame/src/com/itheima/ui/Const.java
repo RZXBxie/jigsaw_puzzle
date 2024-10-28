@@ -19,6 +19,9 @@ public class Const {
 	public static final int BACKGROUND_IMAGE_WIDTH = 508;
 	public static final int BACKGROUND_IMAGE_HEIGHT = 560;
 
+	public static final int ABOUT_IMAGE_WIDTH = 340;
+	public static final int ABOUT_IMAGE_HEIGHT = 338;
+
 	public static final int LEFT = 37;
 	public static final int UP = 38;
 	public static final int RIGHT = 39;

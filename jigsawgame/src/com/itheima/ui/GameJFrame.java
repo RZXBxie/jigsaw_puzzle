@@ -3,13 +3,15 @@ package com.itheima.ui;
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Random;
 
 import static com.itheima.ui.Const.*;
 
-public class GameJFrame extends JFrame implements KeyListener {
+public class GameJFrame extends JFrame implements KeyListener, ActionListener {
 	// data记录了每张图片的下标
 	int[][] data = new int[4][4];
 
@@ -17,8 +19,16 @@ public class GameJFrame extends JFrame implements KeyListener {
 	int x = 0;
 	int y = 0;
 
+	// step记录游戏步数
+	int step = 0;
+
 	// path记录了图片的位置
 	String path = "jigsawgame/image/girl/girl1/";
+
+	JMenuItem restartItem = new JMenuItem("重新开始");
+	JMenuItem reLoginItem = new JMenuItem("重新登录");
+	JMenuItem closeItem = new JMenuItem("关闭游戏");
+	JMenuItem accountItem = new JMenuItem("联系方式");
 	// 新建一个游戏界面
 	public GameJFrame() {
 		initJFrame();
@@ -52,6 +62,9 @@ public class GameJFrame extends JFrame implements KeyListener {
 		for (int i = 0; i < 4; ++i) {
 			System.arraycopy(index, i * 4, data[i], 0, 4);
 		}
+
+		// 重新开始游戏的时候，步数置为空
+		step = 0;
 	}
 
 	private void initImage() {
@@ -62,9 +75,7 @@ public class GameJFrame extends JFrame implements KeyListener {
 			JLabel label = new JLabel(new ImageIcon(WIN_PICTURE_PATH));
 			label.setBounds(203, 283, 197, 73);
 			this.getContentPane().add(label);
-			loadImage();
 			System.out.println("游戏胜利！");
-			return;
 		}
 		loadImage();
 	}
@@ -96,6 +107,11 @@ public class GameJFrame extends JFrame implements KeyListener {
 		label.setBounds(40, 40, BACKGROUND_IMAGE_WIDTH, BACKGROUND_IMAGE_HEIGHT);
 		this.getContentPane().add(label);
 
+		// 增加步数显示的功能
+		label = new JLabel("步数：" + step);
+		label.setBounds(50, 30, 100, 20);
+		this.getContentPane().add(label);
+
 		// 刷新一下界面
 		this.getContentPane().repaint();
 	}
@@ -120,21 +136,41 @@ public class GameJFrame extends JFrame implements KeyListener {
 		// 创建整个菜单对象
 		JMenuBar menuBar = new JMenuBar();
 
-		// 创建菜单上面的两个选项的对象（功能、关于我们）
+		// 创建菜单上面的三个选项的对象（功能、关于我们、游戏说明）
 		JMenu functionJMenu = new JMenu("功能");
-		JMenu aboutJMenu = new JMenu("关于我们");
+		JMenu aboutJMenu = new JMenu("关于作者");
+		JMenu instructions = new JMenu("游戏说明");
 
-		// 创建功能列表
-		JMenuItem restartItem = new JMenuItem("重新开始");
-		JMenuItem reLoginItem = new JMenuItem("重新登录");
-		JMenuItem closeItem = new JMenuItem("关闭游戏");
-		JMenuItem accountItem = new JMenuItem("公众号");
+		// 创建功能条目
+
+		JMenuItem moveUp = new JMenuItem("上移：↑键");
+		JMenuItem moveDown = new JMenuItem("下移：↓键");
+		JMenuItem moveLeft = new JMenuItem("左移：←键");
+		JMenuItem moveRight = new JMenuItem("右移：→键");
+		JMenuItem viewOriginalImage = new JMenuItem("查看原图：a键");
+		JMenuItem cheatCode = new JMenuItem("一键通关：c键");
+
+		// 给相关条目绑定事件
+		restartItem.addActionListener(this);
+		reLoginItem.addActionListener(this);
+		closeItem.addActionListener(this);
+		accountItem.addActionListener(this);
 
 		// 将相应功能添加到菜单中
 		functionJMenu.add(restartItem);
 		functionJMenu.add(reLoginItem);
 		functionJMenu.add(closeItem);
+
 		aboutJMenu.add(accountItem);
+
+		instructions.add(moveUp);
+		instructions.add(moveDown);
+		instructions.add(moveLeft);
+		instructions.add(moveRight);
+		instructions.add(viewOriginalImage);
+		instructions.add(cheatCode);
+
+		menuBar.add(instructions);
 		menuBar.add(functionJMenu);
 		menuBar.add(aboutJMenu);
 		this.setJMenuBar(menuBar);
@@ -210,6 +246,7 @@ public class GameJFrame extends JFrame implements KeyListener {
 		data[x][y] = data[x][y - 1];
 		data[x][y - 1] = 0;
 		y--;
+		step++;
 		System.out.println("向左移动");
 		initImage();
 	}
@@ -222,6 +259,7 @@ public class GameJFrame extends JFrame implements KeyListener {
 		data[x][y] = data[x][y + 1];
 		data[x][y + 1] = 0;
 		y++;
+		step++;
 		System.out.println("向右移动");
 		initImage();
 	}
@@ -234,6 +272,7 @@ public class GameJFrame extends JFrame implements KeyListener {
 		data[x][y] = data[x - 1][y];
 		data[x - 1][y] = 0;
 		x--;
+		step++;
 		System.out.println("向上移动");
 		initImage();
 	}
@@ -246,7 +285,44 @@ public class GameJFrame extends JFrame implements KeyListener {
 		data[x][y] = data[x + 1][y];
 		data[x + 1][y] = 0;
 		x++;
+		step++;
 		System.out.println("向下移动");
 		initImage();
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		Object obj = e.getSource();
+		if (obj == restartItem) {
+			System.out.println("重新开始游戏");
+			initData();
+			initImage();
+		} else if (obj == reLoginItem) {
+			System.out.println("重新登录");
+			this.setVisible(false);
+			new LoginJFrame();
+		} else if (obj == closeItem) {
+			System.out.println("退出游戏");
+			System.exit(0);
+		} else if (obj == accountItem) {
+			System.out.println("二维码");
+
+			// 新建一个弹框，并添加图片
+			JDialog dialog = new JDialog();
+			JLabel label = new JLabel(new ImageIcon("jigsawgame\\image\\about.jpg"));
+			label.setBounds(0, 0, ABOUT_IMAGE_WIDTH, ABOUT_IMAGE_HEIGHT);
+			dialog.getContentPane().add(label);
+
+			// 设置弹框大小
+			dialog.setSize(400, 400);
+			// 设置弹框置顶
+			dialog.setAlwaysOnTop(true);
+			// 设置弹框居中
+			dialog.setLocationRelativeTo(null);
+			// 设置“不关闭弹框就无法继续操作”
+			dialog.setModal(true);
+			// 让弹框可视化
+			dialog.setVisible(true);
+		}
 	}
 }
