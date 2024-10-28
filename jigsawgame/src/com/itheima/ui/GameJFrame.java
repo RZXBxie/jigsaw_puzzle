@@ -10,6 +10,7 @@ import java.util.Random;
 import static com.itheima.ui.Const.*;
 
 public class GameJFrame extends JFrame implements KeyListener {
+	// data记录了每张图片的下标
 	int[][] data = new int[4][4];
 	// x和y记录了空白图片所在的位置
 	int x = 0;
@@ -31,13 +32,14 @@ public class GameJFrame extends JFrame implements KeyListener {
 
 	private void initData() {
 		int[] index = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
+		Random r = new Random();
+		for (int i = 0; i < index.length; ++i) {
+			int idx = r.nextInt(index.length);
+			swap(index, i, idx);
+		}
 
 		for (int i = 0; i < index.length; ++i) {
-			Random r = new Random();
-			int idx = r.nextInt(index.length);
-			if (index[idx] != 0) {
-				swap(index, i, idx);
-			} else {
+			if (index[i] == 0) {
 				x = i / 4;
 				y = i % 4;
 			}
@@ -49,6 +51,9 @@ public class GameJFrame extends JFrame implements KeyListener {
 	}
 
 	private void initImage() {
+		// 删除原有的全部图片
+		this.getContentPane().removeAll();
+
 		// 将图片添加到JFrame中
 		// 先加载的图片在上方，后加载的图片在下方
 		for (int i = 0; i < 4; i++) {
@@ -74,6 +79,9 @@ public class GameJFrame extends JFrame implements KeyListener {
 		JLabel label = new JLabel(bg);
 		label.setBounds(40, 40, BACKGROUND_IMAGE_WIDTH, BACKGROUND_IMAGE_HEIGHT);
 		this.getContentPane().add(label);
+
+		// 刷新一下界面
+		this.getContentPane().repaint();
 	}
 
 	public void swap(int[] arr, int x, int y) {
@@ -138,10 +146,58 @@ public class GameJFrame extends JFrame implements KeyListener {
 	public void keyReleased(KeyEvent e) {
 		int code = e.getKeyCode();
 		switch (code) {
-			case LEFT -> System.out.println("向左移动");
-			case UP -> System.out.println("向上移动");
-			case RIGHT -> System.out.println("向右移动");
-			case DOWN -> System.out.println("向下移动");
+			case LEFT -> moveLeft();
+			case UP -> moveUp();
+			case RIGHT -> moveRight();
+			case DOWN -> moveDown();
 		}
+	}
+
+	public void moveLeft() {
+		if (y == 0) {
+			System.out.println("已到达左边界，无法继续移动");
+			return;
+		}
+		data[x][y] = data[x][y - 1];
+		data[x][y - 1] = 0;
+		y--;
+		System.out.println("向左移动");
+		initImage();
+	}
+
+	public void moveRight() {
+		if (y == 3) {
+			System.out.println("已到达右边界，无法继续移动");
+			return;
+		}
+		data[x][y] = data[x][y + 1];
+		data[x][y + 1] = 0;
+		y++;
+		System.out.println("向右移动");
+		initImage();
+	}
+
+	public void moveUp() {
+		if (x == 0) {
+			System.out.println("已到达上边界，无法继续移动");
+			return;
+		}
+		data[x][y] = data[x - 1][y];
+		data[x - 1][y] = 0;
+		x--;
+		System.out.println("向上移动");
+		initImage();
+	}
+
+	public void moveDown() {
+		if (x == 3) {
+			System.out.println("已到达下边界，无法继续移动");
+			return;
+		}
+		data[x][y] = data[x + 1][y];
+		data[x + 1][y] = 0;
+		x++;
+		System.out.println("向下移动");
+		initImage();
 	}
 }
