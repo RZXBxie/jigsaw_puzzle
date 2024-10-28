@@ -94,7 +94,7 @@ public class GameJFrame extends JFrame implements KeyListener, ActionListener {
 				JLabel label = new JLabel(icon);
 
 				// 设置图片的位置
-				label.setBounds(j * GAME_PICTURE_WIDTH + 83, i * GAME_PICTURE_HEIGHT + 134, GAME_PICTURE_WIDTH, GAME_PICTURE_HEIGHT);
+				label.setBounds(j * GAME_IMAGE_WIDTH + 83, i * GAME_IMAGE_HEIGHT + 134, GAME_IMAGE_WIDTH, GAME_IMAGE_HEIGHT);
 
 				// 给图片添加边框
 				label.setBorder(new BevelBorder(BevelBorder.LOWERED));
@@ -241,7 +241,7 @@ public class GameJFrame extends JFrame implements KeyListener, ActionListener {
 	public void loadCompletePicture() {
 		this.getContentPane().removeAll();
 		JLabel label = new JLabel(new ImageIcon(path + "all.jpg"));
-		label.setBounds(83, 134, COMPLETE_PICTURE_WIDTH, COMPLETE_PICTURE_HEIGHT);
+		label.setBounds(83, 134, COMPLETE_IMAGE_WIDTH, COMPLETE_IMAGE_HEIGHT);
 		this.getContentPane().add(label);
 		label = new JLabel(new ImageIcon(BACK_GROUND_PICTURE_PATH));
 		label.setBounds(40, 40, BACKGROUND_IMAGE_WIDTH, BACKGROUND_IMAGE_HEIGHT);
@@ -310,8 +310,8 @@ public class GameJFrame extends JFrame implements KeyListener, ActionListener {
 			initImage();
 		} else if (obj == reLoginItem) {
 			System.out.println("重新登录");
-			this.setVisible(false);
-			new LoginJFrame();
+			// this.setVisible(false);
+			// new LoginJFrame();
 		} else if (obj == closeItem) {
 			System.out.println("退出游戏");
 			System.exit(0);

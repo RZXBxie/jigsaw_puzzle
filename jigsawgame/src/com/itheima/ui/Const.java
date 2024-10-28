@@ -1,11 +1,11 @@
 package com.itheima.ui;
 
 public class Const {
-	public static final int GAME_PICTURE_WIDTH = 105;
-	public static final int GAME_PICTURE_HEIGHT = 105;
+	public static final int GAME_IMAGE_WIDTH = 105;
+	public static final int GAME_IMAGE_HEIGHT = 105;
 
-	public static final int COMPLETE_PICTURE_WIDTH = 420;
-	public static final int COMPLETE_PICTURE_HEIGHT = 420;
+	public static final int COMPLETE_IMAGE_WIDTH = 420;
+	public static final int COMPLETE_IMAGE_HEIGHT = 420;
 
 	public static final int GAME_WINDOW_WIDTH = 603;
 	public static final int GAME_WINDOW_HEIGHT = 690;
@@ -21,6 +21,15 @@ public class Const {
 
 	public static final int ABOUT_IMAGE_WIDTH = 340;
 	public static final int ABOUT_IMAGE_HEIGHT = 338;
+
+	public static final int USERNAME_IMAGE_WIDTH = 47;
+	public static final int USERNAME_IMAGE_HEIGHT = 17;
+
+	public static final int PASSWORD_IMAGE_WIDTH = 32;
+	public static final int PASSWORD_IMAGE_HEIGHT = 16;
+
+	public static final int CODE_IMAGE_WIDTH = 50;
+	public static final int CODE_IMAGE_HEIGHT = 30;
 
 	public static final int LEFT = 37;
 	public static final int UP = 38;
