@@ -12,9 +12,13 @@ import static com.itheima.ui.Const.*;
 public class GameJFrame extends JFrame implements KeyListener {
 	// data记录了每张图片的下标
 	int[][] data = new int[4][4];
+
 	// x和y记录了空白图片所在的位置
 	int x = 0;
 	int y = 0;
+
+	// path记录了图片的位置
+	String path = "jigsawgame/image/girl/girl1/";
 	// 新建一个游戏界面
 	public GameJFrame() {
 		initJFrame();
@@ -54,12 +58,22 @@ public class GameJFrame extends JFrame implements KeyListener {
 		// 删除原有的全部图片
 		this.getContentPane().removeAll();
 
-		// 将图片添加到JFrame中
-		// 先加载的图片在上方，后加载的图片在下方
+		if (isWin()) {
+			JLabel label = new JLabel(new ImageIcon(WIN_PICTURE_PATH));
+			label.setBounds(203, 283, 197, 73);
+			this.getContentPane().add(label);
+			loadImage();
+			System.out.println("游戏胜利！");
+			return;
+		}
+		loadImage();
+	}
+
+	private void loadImage() {
 		for (int i = 0; i < 4; i++) {
 			for (int j = 0; j < 4; j++) {
 				// 新建一个ImageIcon对象，它用来存储图片
-				String filename = "jigsawgame/image/girl/girl1/" + data[i][j] + ".jpg";
+				String filename = path + data[i][j] + ".jpg";
 				ImageIcon icon = new ImageIcon(filename);
 
 				// 新建一个JLabel对象，他可以管理图片和文字
@@ -75,7 +89,9 @@ public class GameJFrame extends JFrame implements KeyListener {
 				this.getContentPane().add(label);
 			}
 		}
-		ImageIcon bg = new ImageIcon("jigsawgame\\image\\background.png");
+		// 将图片添加到JFrame中
+		// 先加载的图片在上方，后加载的图片在下方
+		ImageIcon bg = new ImageIcon(BACK_GROUND_PICTURE_PATH);
 		JLabel label = new JLabel(bg);
 		label.setBounds(40, 40, BACKGROUND_IMAGE_WIDTH, BACKGROUND_IMAGE_HEIGHT);
 		this.getContentPane().add(label);
@@ -84,7 +100,16 @@ public class GameJFrame extends JFrame implements KeyListener {
 		this.getContentPane().repaint();
 	}
 
-	public void swap(int[] arr, int x, int y) {
+	private boolean isWin() {
+		for (int i = 0; i < 4; i++) {
+			for (int j = 0; j < 4; ++j) {
+				if (data[i][j] != CORRECT_INDEX[i][j]) return false;
+			}
+		}
+		return true;
+	}
+
+	private void swap(int[] arr, int x, int y) {
 		int tmp = arr[x];
 		arr[x] = arr[y];
 		arr[y] = tmp;
@@ -137,20 +162,44 @@ public class GameJFrame extends JFrame implements KeyListener {
 
 	}
 
+	// 按下不松显示完整图片
 	@Override
 	public void keyPressed(KeyEvent e) {
-
+		int code = e.getKeyCode();
+		if (code == ALL) loadCompletePicture();
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
+		// 如果不加这个判断，在游戏胜利后还是可以移动空白格，这是bug
+		if (isWin()) {
+			return;
+		}
 		int code = e.getKeyCode();
 		switch (code) {
 			case LEFT -> moveLeft();
 			case UP -> moveUp();
 			case RIGHT -> moveRight();
 			case DOWN -> moveDown();
+			case ALL -> initImage();
+			case CHEAT_CODE -> {
+				for (int i = 0; i < 4; ++i) {
+					System.arraycopy(CORRECT_INDEX[i], 0, data[i], 0, 4);
+				}
+				initImage();
+			}
 		}
+	}
+
+	public void loadCompletePicture() {
+		this.getContentPane().removeAll();
+		JLabel label = new JLabel(new ImageIcon(path + "all.jpg"));
+		label.setBounds(83, 134, COMPLETE_PICTURE_WIDTH, COMPLETE_PICTURE_HEIGHT);
+		this.getContentPane().add(label);
+		label = new JLabel(new ImageIcon(BACK_GROUND_PICTURE_PATH));
+		label.setBounds(40, 40, BACKGROUND_IMAGE_WIDTH, BACKGROUND_IMAGE_HEIGHT);
+		this.getContentPane().add(label);
+		this.getContentPane().repaint();
 	}
 
 	public void moveLeft() {
