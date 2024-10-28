@@ -29,6 +29,9 @@ public class GameJFrame extends JFrame implements KeyListener, ActionListener {
 	JMenuItem reLoginItem = new JMenuItem("重新登录");
 	JMenuItem closeItem = new JMenuItem("关闭游戏");
 	JMenuItem accountItem = new JMenuItem("联系方式");
+	JMenuItem girl = new JMenuItem("美女");
+	JMenuItem animal = new JMenuItem("动物");
+	JMenuItem sport = new JMenuItem("运动");
 	// 新建一个游戏界面
 	public GameJFrame() {
 		initJFrame();
@@ -139,10 +142,10 @@ public class GameJFrame extends JFrame implements KeyListener, ActionListener {
 		// 创建菜单上面的三个选项的对象（功能、关于我们、游戏说明）
 		JMenu functionJMenu = new JMenu("功能");
 		JMenu aboutJMenu = new JMenu("关于作者");
-		JMenu instructions = new JMenu("游戏说明");
+		JMenu instructionsJMenu = new JMenu("游戏说明");
+		JMenu changeImage = new JMenu("更换图片");
 
 		// 创建功能条目
-
 		JMenuItem moveUp = new JMenuItem("上移：↑键");
 		JMenuItem moveDown = new JMenuItem("下移：↓键");
 		JMenuItem moveLeft = new JMenuItem("左移：←键");
@@ -155,24 +158,32 @@ public class GameJFrame extends JFrame implements KeyListener, ActionListener {
 		reLoginItem.addActionListener(this);
 		closeItem.addActionListener(this);
 		accountItem.addActionListener(this);
+		girl.addActionListener(this);
+		animal.addActionListener(this);
+		sport.addActionListener(this);
 
 		// 将相应功能添加到菜单中
+		functionJMenu.add(changeImage);
 		functionJMenu.add(restartItem);
 		functionJMenu.add(reLoginItem);
 		functionJMenu.add(closeItem);
 
 		aboutJMenu.add(accountItem);
 
-		instructions.add(moveUp);
-		instructions.add(moveDown);
-		instructions.add(moveLeft);
-		instructions.add(moveRight);
-		instructions.add(viewOriginalImage);
-		instructions.add(cheatCode);
+		instructionsJMenu.add(moveUp);
+		instructionsJMenu.add(moveDown);
+		instructionsJMenu.add(moveLeft);
+		instructionsJMenu.add(moveRight);
+		instructionsJMenu.add(viewOriginalImage);
+		instructionsJMenu.add(cheatCode);
 
-		menuBar.add(instructions);
+		changeImage.add(girl);
+		changeImage.add(animal);
+		changeImage.add(sport);
+
 		menuBar.add(functionJMenu);
 		menuBar.add(aboutJMenu);
+		menuBar.add(instructionsJMenu);
 		this.setJMenuBar(menuBar);
 	}
 
@@ -323,6 +334,23 @@ public class GameJFrame extends JFrame implements KeyListener, ActionListener {
 			dialog.setModal(true);
 			// 让弹框可视化
 			dialog.setVisible(true);
+		} else if (obj == girl) {
+			path = "jigsawgame/image/girl/girl" + getOffset(13) + "/";
+			initData();
+			initImage();
+		} else if (obj == animal) {
+			path = "jigsawgame/image/animal/animal" + getOffset(8) + "/";
+			initData();
+			initImage();
+		} else if (obj == sport) {
+			path = "jigsawgame/image/sport/sport" + getOffset(10) + "/";
+			initData();
+			initImage();
 		}
+	}
+
+	private int getOffset(int seed) {
+		Random r = new Random();
+		return r.nextInt(seed) + 1;
 	}
 }
